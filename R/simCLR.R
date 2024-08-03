@@ -23,8 +23,6 @@
 
 #' @export
 
-
-
 simulate_observed_clr <- function(waves = 10,
                                 stability.x = 0.9,
                                 stability.y = 0.9,
@@ -72,7 +70,4 @@ simulate_observed_clr <- function(waves = 10,
 
   return(list(model = model_string, data = dat))
 }
-# Example code to be displayed in the documentation
-example_data <- simulate_observed_clr(waves = 3, sample.nobs = 100)
-head(example_data$data)
 

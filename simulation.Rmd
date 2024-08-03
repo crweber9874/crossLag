@@ -1,0 +1,117 @@
+---
+title: "Simulating the consequences of unobserved confounding in the CLPM"
+author: "Christopher Weber"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+Start by simulating some data.
+
+-   Never uses retina figures
+-   Has a smaller default figure size
+-   Uses a custom CSS stylesheet instead of the default Twitter Bootstrap style
+
+```{r}
+#devtools::install_github("crweber9874/crossLag")
+library(dplyr)
+library(crossLag)
+simulate_observed_clr(waves = 2, sample.nobs = 2) 
+```
+
+The function outputs data for a two wave panel, with 2 observations. Much can be customized, to explore properties of various estimators.
+
+```{r}
+
+invisible(simulate_observed_clr(waves = 2, sample.nobs = 2, 
+                      stability.x = 0.75, stability.y = 0.75, 
+                      contemporaneous.x = 0.5, cross.x = 0.5, 
+                      beta.z = 0.5, beta.u = 0.5, 
+                      var.y = 1, var.x = 1, 
+                      cov.xy = 0.5, cov.uz = 0.5))
+```
+
+The function returns a list, the first element is the lavaan model syntax used to generate the data. The second is the data itself. 
+
+```{r}
+library(lavaan)
+# Example code to be displayed in the documentation
+example_data <- simulate_observed_clr(waves = 3, sample.nobs = 100)
+# Fit lavaan model
+fit <- sem(example_data$model, data = example_data$data)
+summary(fit, fit.measures=TRUE, standardized=TRUE, rsquare=TRUE)
+```
+
+## Quick Simulation
+
+Let's start by simulating a 2 wave panel with 100 observations. Vary the following :
+ 
+ - The effect of the unobserved confounder on the observed variables. [-0.6, 0.6]
+
+```{r, fig.width=6, fig.height=6, echo = FALSE, warning = FALSE, message = FALSE}
+library(ggplot2)
+library(tibble)
+## 
+  ggtheme =
+  theme(
+  plot.title =  ggplot2::element_text(face = "bold", hjust = 0, vjust = 0, colour = "#3C3C3C", size = 20),
+  axis.text.x = ggplot2::element_text(size = 16, colour = "#535353", face = "bold"),
+  axis.text.y = ggplot2::element_text(size = 16, colour = "#535353", face = "bold"),
+  axis.title =  ggplot2::element_text(size = 16, colour = "#535353", face = "bold"),
+  axis.title.y = ggplot2::element_text(size = 16, colour = "#535353", face = "bold", vjust = 1.5),
+  axis.ticks = ggplot2::element_blank(),
+  strip.text.x = ggplot2::element_text(size = 12),
+  panel.grid.major = ggplot2::element_line(colour = "#D0D0D0", size = .25),
+  panel.background = ggplot2::element_rect(fill = "white"),
+  legend.text = ggplot2::element_text(size = 12),
+  legend.title = ggplot2::element_text(size = 12) )
+
+### Simulations ###
+confounding = seq(-0.9, 0.9, by = 0.05)  
+replications = 100
+coefficients = c()
+
+for(c in confounding){
+  for(r in 1:replications){
+  dat = simulate_observed_clr(waves = 2, sample.nobs = 1000, 
+                      stability.x = 0.75, stability.y = 0.75, 
+                      contemporaneous.x = 0, cross.x = 0.15, 
+                      beta.z = 0, beta.u = c, 
+                      var.y = 1, var.x = 1, 
+                      cov.xy = 0.5, cov.uz = 0.5)
+  coefs = lm(y2 ~ -1 +  x1 + y1, data = dat$data)$coefficients
+  #coefs = cbind(coefs, c, r)
+  coefficients = rbind(coefficients, coefs)
+  }
+}
+coefficients %>% as_tibble() %>%
+  mutate(confounding = rep(confounding, each = replications)) %>% 
+  ggplot(aes(x = confounding, y = x1)) + 
+  geom_jitter(width = 0.02, height = 0.02, alpha = 0.3, color = "darkgrey") +
+  geom_smooth() + 
+  labs(title = "Effect of unobserved confounder", x = "Unobserved confounder effect", y = "Coefficient for the cross lagged effect, x1 on y2") + ggtheme + 
+  # plot a horizontal line at 0.3
+  geom_hline(yintercept = 0.15, linetype = "dashed", color = "black") +
+  # add confidence band
+# Add a label that says, "true value"
+  geom_text(aes(x = 0, y = 0.17, label = "True Value"), hjust = 0, vjust = 0, size = 5, color = "black") +
+  theme(legend.position = "none")
+
+```
+
+## More Examples
+
+You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes[^1], and tables, e.g. using `knitr::kable()`.
+
+[^1]: A footnote here.
+
+```{r, echo=FALSE, results='asis'}
+knitr::kable(head(mtcars, 10))
+```
+
+Also a quote using `>`:
+
+> "He who gives up [code] safety for [code] speed deserves neither." ([via](https://twitter.com/hadleywickham/status/504368538874703872))
