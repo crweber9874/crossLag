@@ -16,5 +16,6 @@ Imports:
   dplyr,
   ggplot2,
   lavaan,
+  lme4,
 Suggests:
   knitr

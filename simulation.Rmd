@@ -215,12 +215,12 @@ Let's reshape the data from wide to long, using reshapeLong from the package. Th
 
 ```{r}
 dat = simulate_observed_clr(waves = 5, 
-                      sample.nobs = 5000, 
+                      sample.nobs = 1000, 
                       stability.x = 0.90, 
                       stability.y = 0.90, 
                       contemporaneous.x = 0, 
                       cross.x = 0.15, 
-                      beta.z = 0.5, 
+                      beta.z = 0, 
                       beta.u = 0.5, 
                       var.y = 1,
                       var.x = 1, 
@@ -234,3 +234,30 @@ dat = simulate_observed_clr(waves = 5,
 dat_long = reshape_long_sim_cr(dat)
 head(dat_long)
 ```
+
+```{r}
+# Fit the brms model
+library(brms)
+fit = brm(y ~ -1 +  xlag + ylag + (1|id), data = dat_long)
+summary(fit)
+```
+Obviously this is quite a bit different from the true parameter values. The stability coefficient should be 0.9; the cross-lag should be 0.15. Matters are substantially more problematic when the contemporaneous effect is present in the DGP. Again, this opens a colliding path for $y$ biasing the coefficients.  
+
+```{r}
+dat = simulate_observed_clr(waves = 5, 
+                      sample.nobs = 1000, 
+                      stability.x = 0.90, 
+                      stability.y = 0.90, 
+                      contemporaneous.x = 0.5, 
+                      cross.x = 0.15, 
+                      beta.z = 0, 
+                      beta.u = 0.5, 
+                      var.y = 1,
+                      var.x = 1, 
+                      cov.xy = 0.5, 
+                      cov.uz = 0.5)$data 
+
+dat_long = reshape_long_sim_cr(dat) 
+brm(y ~ -1 +  xlag + ylag + (1|id), data = dat_long)
+
+
