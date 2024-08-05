@@ -19,7 +19,7 @@
 #' @export
 
 
-reshapeLong <- function(data = dat) {
+reshape_long_sim_cr <- function(data = dat) {
   y <- data %>%
     dplyr::select(tidyr::contains("y")) %>%
     dplyr::mutate(id = dplyr::row_number()) %>%

@@ -15,6 +15,6 @@ Imports:
   MASS,
   dplyr,
   ggplot2,
-  lavaan
+  lavaan,
 Suggests:
   knitr
