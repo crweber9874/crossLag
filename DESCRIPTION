@@ -15,7 +15,8 @@ Imports:
   MASS,
   dplyr,
   ggplot2,
-  lavaan,
-  lme4,
+  lavaan
 Suggests:
-  knitr
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
