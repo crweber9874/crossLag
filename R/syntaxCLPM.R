@@ -9,7 +9,7 @@
 #' @export
 #'
 
-model_syntax = function(
+model_syntax_clpm = function(
     waves = 10,
     model_type = c('clpm', 'ri-clpm')) {
   model_string <- "kappa =~ 1* x1"
