@@ -21,6 +21,21 @@ suppressMessages(library(ggdag))
 suppressMessages(library(ggplot2))
 ```
 
+```{r}
+data = simulate_ri(
+         waves = 3,
+         stability.p = 0.9,
+         stability.q = 0.9,
+         cross.p = 0.1,
+         cross.q = 0.1,
+         variance.p = 1,
+         variance.q = 1,
+         cov.pq = 0.25,
+         beta.u = 0.25,
+         sample.nobs = 1000)
+  
+```
+
 Yet, it is not uncommon for researchers to use statistical techniques to identify causal mechanisms, occasionally with very little theorizing about the data generating process. One such statistical technique is the cross-lagged panel model (CLPM). The CLPM is a variant of the Autoregressive Distributed Lag model used in econometrics, and the identified causal mechanism is a particular type of causality, Granger Causality. The reasoning is both simple and elegant. The notion is that if one measures $x$ at time $t-1$ and $t$, and $y$ at time $t-1$ and $t$, then one estimates a model that predicts $y_{t}$ from $x_{t-1}$ and $y_{t-1}$, and an additional model where $x_{t}$ is predicted from $y_{t-1}$ and $x_{t-1}$. The temporal ordering of the data is then used to identify causal relationships. Although one may not be able to manipulate $x$ and $t$ -- to rule out spurious relationships -- if $x$ measured in the past predicts $y$ in the present, but $y$ measured in the past doesn't predict $x$ in the present, one can be reasonably certain that the causal ordering is such that $x$ affects $y$ and $y$ does not affect $x$. Graphically, the model can be represented as a Directed Acyclic Graph (DAG, Pearl 2001).
 
 ```{r, fig.width=6, fig.height=4, out.width="40%"}
@@ -245,6 +260,6 @@ summary(fit)
 
 Obviously this is quite a bit different from the true parameter values. The stability coefficient should be 0.9; the cross-lag should be 0.15. Matters are substantially more problematic when the contemporaneous effect is present in the DGP. Again, this opens a colliding path for $y$ biasing the coefficients.
 
-\`\`\`{r} dat = simulate_observed_clr(waves = 5, sample.nobs = 1000, stability.x = 0.90, stability.y = 0.90, contemporaneous.x = 0.5, cross.x = 0.15, beta.z = 0, beta.u = 0.5, var.y = 1, var.x = 1, cov.xy = 0.5, cov.uz = 0.5)\$data
+
 
 dat_long = reshape_long_sim_cr(dat) brm(y \~ -1 + xlag + ylag + (1\|id), data = dat_long)
