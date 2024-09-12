@@ -25,7 +25,8 @@ model_syntax_clpm = function(
 
 
   if(model_type == "clpm"){
-  # latent variable covariances and variances
+  # latent variable covariances and variances; the only difference between the RI-CLPM and the CLPM is
+  # error variances -- intercepts -- are 0.
         model_string <- paste0(model_string,
                          "\nkappa ~~", "0 * kappa
                                          \nomega ~~", "0* omega
@@ -54,11 +55,12 @@ model_syntax_clpm = function(
 
   # Set variances of latent variable residuals
   for(w in 2:waves){
-    model_string <- paste0(model_string, "\n p", w, " ~~ ", "1* p", w,
-                           "\n q", w, " ~~ ",  "  1 * q", w,
+    model_string <- paste0(model_string, "\n p", w, " ~~ ", "pv* p", w,
+                           "\n q", w, " ~~ ",  "  qv * q", w,
                            "\n p", w, " ~~ ",  "  q", w)
   }
 
 
   return(model_string)
 }
+
