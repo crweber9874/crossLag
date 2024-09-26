@@ -28,15 +28,8 @@ simulate_riclpm = function(
          cov.pq = 0.5,
          beta.u = 0.5,
          ...) {
-                model_string <- "kappa =~ 1* x1"
-                for(w in 2:waves){
-                  model_string <- paste0(model_string, " + 1 * x", w)
-                }
+                model_string <- ""
 
-                model_string <- paste0(model_string, "\n omega =~ 1* y1")
-                for(w in 2:waves){
-                  model_string <- paste0(model_string, " + 1 * y", w, "")
-                }
 
                 #Intercepts
                 for(w in 1:waves){

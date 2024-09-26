@@ -130,7 +130,7 @@ simulate_latent_change_multiple= function(
 
   # Define the common factors
   for(w in 1:waves){
-    model_string <- paste0(model_string, "    cf_y", w, " =~ 1*x", w, "\n")
+    model_string <- paste0(model_string, "    cf_y", w, " =~ 1*y", w, "\n")
   }
 
   # Latent true score means (initial free, others = 0)

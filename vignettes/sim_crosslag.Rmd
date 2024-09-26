@@ -1,0 +1,82 @@
+---
+title: "sim_crosslag"
+output: html_document
+date: "2024-09-19"
+---
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+#devtools::install_github("crweber9874/crossLag")
+library(dplyr)
+library(lavaan)
+library(crossLag)
+library(ggplot2)
+library(tibble)
+```
+
+```{r}
+simulate_riclpm(
+    waves = 3,
+    stability.p = 0.9,
+    stability.q = 0.9,
+    cross.p = 0.0,
+    cross.q = 0.0,
+    beta.u = 0,
+    sample.nobs = 1000
+)$data %>% head()
+```
+
+
+```{r}
+simulate_riclpm(
+    waves = 3,
+    stability.p = 0.9,
+    stability.q = 0.9,
+    cross.p = 0.0,
+    cross.q = 0.0,
+    beta.u = 0,
+    sample.nobs = 1000
+)$data %>%
+    reshape_long_sim_cr() -> dat
+
+simulation_parameters = expand.grid(confound.u = seq(0, 0.3, 0.1),
+                                    stability  = seq(0, 0.6, by= 0.1))
+
+# Initialize an empty list to store the results
+results <- list()
+trials <- 10
+
+xlag =  coef(lm(y ~ xlag + ylag, dat))[2]
+ylag =  coef(lm(y ~ xlag + ylag, dat))[3]
+
+values <- c(xlag = xlag, ylag = ylag)
+  
+# Loop through each combination of parameters
+for (i in 1:nrow(simulation_parameters)) {
+    for(j in 1:10){
+  params <- simulation_parameters[i, ]
+  simulate_riclpm(
+    waves = 3,
+    stability.p = params$stability,
+    stability.q = params$stability,
+    cross.p = 0.0,
+    cross.q = 0.0,
+    beta.u = params$confound.u,
+    sample.nobs = 100
+)$data %>%
+    reshape_long_sim_cr() -> dat
+
+  xvalue =  coef(lm(y ~ xlag + ylag, dat))[2]
+  yvalue =  coef(lm(y ~ xlag + ylag, dat))[3]
+
+  # Store the results
+   results[[length(results) + 1]] <- data.frame(
+    confound.u = params$confound.u,
+    stability =  params$stability,
+    xvalue = xvalue, 
+    yvalue = yvalue,
+    trial = j
+        )
+    }
+}
+results_df <- do.call(rbind, results)
+```

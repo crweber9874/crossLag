@@ -10,7 +10,6 @@
 #' @export
 #'
 
-
 model_syntax_change = function(
     waves = 10,
     model_type = c('latent_change_x', "latent_change_xy")) {
@@ -21,18 +20,22 @@ model_syntax_change = function(
   model_string <- ""
 
   # Define the common factors
+  # This corresponds to the true score model
   for(w in 1:waves){
     model_string <- paste0(model_string, "    cf", w, " =~ 1*x", w, "\n")
   }
 
-  # Latent true score means (initial free, others = 0)
+  # Lots of restrictions in this model
+  # Set the Latent true score means (initial free, others = 0)
+  # This is because of how change is constructed, as a factor.
   model_string <- paste0(model_string, "    cf1 ~ 1\n")
   for(w in 2:waves){
     model_string <- paste0(model_string, "    cf", w, " ~ 0*1\n")
   }
 
   # Latent true score variances (initial free, others = 0)
-  model_string <- paste0(model_string, "    cf1 ~~ start(15)*cf1\n")
+  # Again, this is because of how change is specified
+  model_string <- paste0(model_string, "    cf1 ~~ start(5)*cf1\n")
   for(w in 2:waves){
     model_string <- paste0(model_string, "    cf", w, " ~~ 0*cf", w, "\n")
   }
@@ -42,7 +45,7 @@ model_syntax_change = function(
     model_string <- paste0(model_string, "    x", w, " ~ 0*1\n")
   }
 
-  # Observed residual variances (constrained to equality)
+  # Observed residual variances
   for(w in 2:waves){
     model_string <- paste0(model_string, "    x", w, " ~~ sigma2_u*x", w, "\n")
   }
