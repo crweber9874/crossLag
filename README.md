@@ -22,7 +22,9 @@ The **Cross-Lagged Panel Model (CLPM)** model was pioneered in Campbell (1963) a
 
 In the language of causal reasoning, the Directed Acyclic Graph (DAG) for the CLR model can be expanded to incorporate commonly encountered data issues arising with the CLPM, mediation, confounding, and collision.
 
-### Structur
+## [A Brief Presentation of the CLPM and RI-CLPM](https://crosslagregression.netlify.app/#/title-slide)
+
+### Structure
 
 - $\texttt{~/R}$. The functions used in the simulation and R-package.
 
@@ -30,5 +32,5 @@ In the language of causal reasoning, the Directed Acyclic Graph (DAG) for the CL
 
 - $\texttt{~/presentations}$. Presentations on the CLPM and the R-package.
 
-- [SGPP Presentation, October 4, 2024](~/Dropbox/github_repos/crossLag_p/crossLag/presentations/CLPM.pdf)
+- [SGPP Presentation, October 4, 2024](~/Dropbox/github_repos/crossLag_p/crossLag/presentations/sgpp_presentation24.html)
 

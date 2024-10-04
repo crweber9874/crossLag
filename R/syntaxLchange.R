@@ -253,9 +253,3 @@ model_syntax_change = function(
 
 
 
-dat = simulate_latent_change_multiple(waves = 8)$data
-
-my_model = model_syntax_change(waves = 8,
-  model_type = "latent_change_xy")
-
-fit = lavaan::sem(my_model, data = dat)

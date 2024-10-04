@@ -7,6 +7,9 @@
     <loc>/LICENSE-text.html</loc>
   </url>
   <url>
+    <loc>/articles/bakker.html</loc>
+  </url>
+  <url>
     <loc>/articles/index.html</loc>
   </url>
   <url>
@@ -25,10 +28,16 @@
     <loc>/reference/index.html</loc>
   </url>
   <url>
+    <loc>/reference/model_syntax_clpm.html</loc>
+  </url>
+  <url>
     <loc>/reference/reshape_long_sim_cr.html</loc>
   </url>
   <url>
     <loc>/reference/simulate_observed_clr.html</loc>
+  </url>
+  <url>
+    <loc>/reference/simulate_riclpm.html</loc>
   </url>
   <url>
     <loc>/reference/zero.one.html</loc>

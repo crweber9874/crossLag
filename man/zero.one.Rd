@@ -17,4 +17,6 @@ Create a zero one normalization
 }
 \examples{
 #rnorm(10) \%>\% zero.one()
+
+
 }

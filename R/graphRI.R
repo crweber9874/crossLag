@@ -65,7 +65,7 @@ ri_graph = function(model = fit, waves = c(3,4,5,6)){
 #      %>%   dplyr::select(-kappa, -omega, -U))
 #
 ## This is the way to structure the plot
-lavaan::lavaan(model_syntax_clpm(waves = 4, model_type = "ri-clpm"),
-                     simulate_riclpm(waves = 4, sample.nobs = 15000)$data
-                     %>%   dplyr::select(-U)) %>% ri_graph(waves = 4)
+# lavaan::lavaan(model_syntax_clpm(waves = 4, model_type = "ri-clpm"),
+#                      simulate_riclpm(waves = 4, sample.nobs = 15000)$data
+#                      %>%   dplyr::select(-U)) %>% ri_graph(waves = 4)
 

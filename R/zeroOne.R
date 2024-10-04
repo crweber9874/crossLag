@@ -6,6 +6,8 @@
 #' @export
 #'
 #' @examples #rnorm(10) %>% zero.one()
+#'
+#'
 zero.one <- function(x) {
 
   min.x <- min(x, na.rm = T)

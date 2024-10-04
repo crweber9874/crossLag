@@ -50,7 +50,10 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="articles/simulation.html">Simulating the consequences of unobserved confounding in the CLPM</a>
+      <a href="articles/bakker.html">Basic Usage</a>
+    </li>
+    <li>
+      <a href="articles/simulation.html">A Brief Overview of Simulation in the crossLag Package</a>
     </li>
   </ul>
 </li>
@@ -68,14 +71,43 @@
       </header><div class="row">
   <div class="contents col-md-9">
 <div class="section level1">
-<div class="page-header"><h1 id="crosslag">CrossLag<a class="anchor" aria-label="anchor" href="#crosslag"></a>
+<div class="page-header"><h1 id="textttcrosslag-the-cross-lagged-regression-design">
+<span class="math inline"><code>crossLag</code></span>: The Cross Lagged Regression Design<a class="anchor" aria-label="anchor" href="#textttcrosslag-the-cross-lagged-regression-design"></a>
 </h1></div>
-<div class="section level2">
-<h2 id="a-package-to-explore-the-chracteristics-and-estimators-of-of-the-cross-lagged-regression-model">A package to explore the chracteristics and estimators of of the Cross-Lagged Regression Model<a class="anchor" aria-label="anchor" href="#a-package-to-explore-the-chracteristics-and-estimators-of-of-the-cross-lagged-regression-model"></a>
-</h2>
+<div class="section level3">
+<h3 id="a-package-to-estimate-latent-variable-panel-models-and-simulation-designs">A package to estimate latent variable panel models and simulation designs<a class="anchor" aria-label="anchor" href="#a-package-to-estimate-latent-variable-panel-models-and-simulation-designs"></a>
+</h3>
+<p>Christopher Weber, PhD</p>
+<p>Unviversity of Arizona</p>
+<p>School of Government and Public Policy</p>
+</div>
+<div class="section level3">
+<h3 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h3>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"crweber9874/crossLag"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a>
+</h3>
 <p>This package develops an analytic framework to analyze panel data in the tradition of the Cross Lagged Panel Model – the CLPM. This repository contains code written by Stanley Feldman, Adam Parish and Chris Weber to critique and improve upon the cross lag regression.</p>
 <p>The <strong>Cross-Lagged Panel Model (CLPM)</strong> model was pioneered in Campbell (1963) as well as Campbell and Stanley (1963) and is an oft used, intuitive method to test <strong>competing causal processes</strong>. The model requires the estimation of lagged effects, including a lag of the dependent variable. By analyzing the lagged effects (the influence of one variable on the other at a later time point), researchers often purport to gain insights into the direction and strength of causal relationships.</p>
 <p>In the language of causal reasoning, the Directed Acyclic Graph (DAG) for the CLR model can be expanded to incorporate commonly encountered data issues arising with the CLPM, mediation, confounding, and collision.</p>
+</div>
+<div class="section level2">
+<h2 id="a-brief-presentation-of-the-clpm-and-ri-clpm">
+<a href="https://crosslagregression.netlify.app/#/title-slide" class="external-link">A Brief Presentation of the CLPM and RI-CLPM</a><a class="anchor" aria-label="anchor" href="#a-brief-presentation-of-the-clpm-and-ri-clpm"></a>
+</h2>
+<div class="section level3">
+<h3 id="structure">Structure<a class="anchor" aria-label="anchor" href="#structure"></a>
+</h3>
+<ul>
+<li><p><span class="math inline"><code> /R</code></span>. The functions used in the simulation and R-package.</p></li>
+<li><p><span class="math inline"><code> /vignettes</code></span>. Brief vignettes on data used in the simulation and the R-package.</p></li>
+<li><p><span class="math inline"><code> /presentations</code></span>. Presentations on the CLPM and the R-package.</p></li>
+<li><p><a href="~/Dropbox/github_repos/crossLag_p/crossLag/presentations/sgpp_presentation24.html">SGPP Presentation, October 4, 2024</a></p></li>
+</ul>
+</div>
 </div>
 </div>
   </div>

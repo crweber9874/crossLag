@@ -14,7 +14,12 @@ Imports:
   MASS,
   dplyr,
   ggplot2,
-  lavaan
+  lavaan,
+  dagitty,
+  ggdag,
+  tidyverse,
+  stringr,
+  ggridges
 Suggests:
     knitr,
     rmarkdown

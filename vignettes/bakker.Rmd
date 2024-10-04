@@ -1,67 +1,22 @@
 ---
-title: "Simulating the consequences of unobserved confounding in the CLPM"
+title: "Basic Usage"
 author: "Christopher Weber"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Basic Usage}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-## The Cross Lagged Regression Model
 
-It is difficult to sort out causal mechanisms with cross-sectional observational data, panel and cross sectional. Causal relationships require careful theorizing about the data generating process. Data, particularly when observational, and statistical procedures do not guarantee that researcher will identify a causal mechanism.
-
-```{r}
-suppressMessages(library(dplyr))
-suppressMessages(library(haven))
-suppressMessages(library(dagitty))
-suppressMessages(library(ggdag))
-suppressMessages(library(ggplot2))
-```
-
-```{r}
-data = simulate_ri(
-         waves = 3,
-         stability.p = 0.9,
-         stability.q = 0.9,
-         cross.p = 0.1,
-         cross.q = 0.1,
-         variance.p = 1,
-         variance.q = 1,
-         cov.pq = 0.25,
-         beta.u = 0.25,
-         sample.nobs = 1000)
-  
-```
 
 Yet, it is not uncommon for researchers to use statistical techniques to identify causal mechanisms, occasionally with very little theorizing about the data generating process. One such statistical technique is the cross-lagged panel model (CLPM). The CLPM is a variant of the Autoregressive Distributed Lag model used in econometrics, and the identified causal mechanism is a particular type of causality, Granger Causality. The reasoning is both simple and elegant. The notion is that if one measures $x$ at time $t-1$ and $t$, and $y$ at time $t-1$ and $t$, then one estimates a model that predicts $y_{t}$ from $x_{t-1}$ and $y_{t-1}$, and an additional model where $x_{t}$ is predicted from $y_{t-1}$ and $x_{t-1}$. The temporal ordering of the data is then used to identify causal relationships. Although one may not be able to manipulate $x$ and $t$ -- to rule out spurious relationships -- if $x$ measured in the past predicts $y$ in the present, but $y$ measured in the past doesn't predict $x$ in the present, one can be reasonably certain that the causal ordering is such that $x$ affects $y$ and $y$ does not affect $x$. Graphically, the model can be represented as a Directed Acyclic Graph (DAG, Pearl 2001).
 
-```{r, fig.width=6, fig.height=4, out.width="40%"}
-options(repr.plot.width = 2, repr.plot.height = 2)  # Set smaller plot size
-g <- dagitty("dag {
-    X1 -> Y2 
-    Y1 -> Y2
-    X1 -> X2 
-    Y1 -> X2
-
-}")
-coordinates(g) <- list(
-    x=c(U1=0.5, Y1=1,X1=1,Y2=2,X2=2, U2=3),
-    y=c(U1=1.5, Y1=1,X1=2,Y2=1,X2=2, U2=2.5) )
-ggdag(g, text = TRUE) + theme_dag() + ggtitle("Figure 1: The Cross-Lagged Regression (CLR) Model") 
-```
 
 The CLPM is a variant of the Autoregressive Distributed Lag model used in econometrics, and the causal mechanism identified is often referred to as Granger Causality. Granger causality is a concept that means that if $x$ measured at time $t-1$ predicts $y$ at time $t$, then $x$ Granger causes $y$. The CLPM can be written as
 
-```{=tex}
-\begin{eqnarray}
-y_{t=2, i}=a_0 + a_1 y_{t=1, i} + a_2 x_{t=1, i} + e_{1,i} \hspace{1in} (1)\\
 
-x_{t=2, i}=b_0 + b_1 y_{t=1, i} + b_2 x_{t=1, i} + e_{2,i} \hspace{1in} (2)\\
-\end{eqnarray}
-```
 The conclusions from the CLPM attempts to leverage the temporal order in which variables are observed. If one were to estimate these two equations using traditional regression techniques, a large $a_2$ coefficient represents a causal relationship from $x_1\rightarrow y_2$; whereas a large $b_2$ coefficient translates to reversed effect, i.e., $y_1 \rightarrow x_2$. If $a_2$ is large and $b_2$ is effectively zero, it is tempting to conclude that $x$ causes $y$ but $y$ does not cause $x$. In both cases, we include the lagged value of the dependent variable, $y_{t-1, i}$ and $x_{t-1, i}$, to control for the effect of the dependent variable; each unit serves as their own control, or baseline. Should $a_2$ or $b_2$ reach conventional levels of statistical significance, it is tempting to conclude that a causal effect has been identified. Economists refer to this as Granger Causality, which is a statistical test of whether the lagged value of the independent variable can predict the dependent variable after controlling for the lagged value of the dependent variable.
 
 While the reasoning is simple, rather strong assumptions about the data generating process must be made.. There several issues that arise upon estimating this model. The first pertains to the empirical consequence of including a lagged realization of the independent variable in the regression model, rather than contemporaneous effects; the the second issue pertains to inclusion of a lagged dependent variable (Allison 1990); and the third revolves around the identification of causal effects, particularly when there are unobserved confounders and stable unit effects.
@@ -87,6 +42,9 @@ Likewise, the inclusion of a lagged dependent variable is also problematic, for 
 Identitying causal effects with observational data is difficult due to the presence of confounding variables. The problem is not limited to cross-sectional data, and also apply to observational panel data (though occasionally for different reasons). Consider the causal diagram in Figure 2, a slight modification on the CLR model presented in Figure 1. In this case, we have added a confounder set $U$ that is correlated with both $x_1$ and $y_1$, as well as $x_2$ and $y_2$.
 
 ```{r, fig.width=6, fig.height=4, out.width="40%"}
+library(dagitty)
+library(ggdag)
+library(ggplot2)
 g <- dagitty("dag {
     X1 -> Y2 
     Y1 -> Y2
@@ -148,118 +106,8 @@ to examine some of this, let's simulated some data, using the package "CrossLag"
 -   *simulate_observed_clr*: Simulate data for a cross-lagged panel model
 -   Vary cross lag, stability, waves, and contemporaneous effects
 
-```{r}
-devtools::install_github("crweber9874/crossLag")
-library(dplyr)
-library(lavaan)
-library(crossLag)
-library(ggplot2)
-library(tibble)
-simulate_observed_clr(waves = 2, sample.nobs = 2, 
-                      stability.x = 0.75, stability.y = 0.75, 
-                      contemporaneous.x = 0.5, cross.x = 0.5, 
-                      beta.z = 0.5, beta.u = 0.5, 
-                      var.y = 1, var.x = 1, 
-                      cov.xy = 0.5, cov.uz = 0.5)
-
-```
-
 The function returns a list, the first element is the lavaan model syntax used to generate the data. The second is the data itself. This allows us to make necessary modifications to the model, which can be applied to the data.
-
-```{r}
-example_data <- simulate_observed_clr(waves = 3, sample.nobs = 100)
-# Fit lavaan model
-fit <- sem(example_data$model, data = example_data$data)
-summary(fit, fit.measures=TRUE, standardized=TRUE, rsquare=TRUE)
-```
 
 Let's start by simulating a 2 wave panel with 100 observations. Vary the following :
 
 -   The effect of the unobserved confounder on the observed variables. [-0.8, 0.8]
-
-```{r, fig.width=6, fig.height=6, echo = FALSE, warning = FALSE, message = FALSE}
-
-  ggtheme =
-  theme(
-  plot.title =  ggplot2::element_text(face = "bold", hjust = 0, vjust = 0, colour = "#3C3C3C", size = 20),
-  axis.text.x = ggplot2::element_text(size = 16, colour = "#535353", face = "bold"),
-  axis.text.y = ggplot2::element_text(size = 16, colour = "#535353", face = "bold"),
-  axis.title =  ggplot2::element_text(size = 16, colour = "#535353", face = "bold"),
-  axis.title.y = ggplot2::element_text(size = 16, colour = "#535353", face = "bold", vjust = 1.5),
-  axis.ticks = ggplot2::element_blank(),
-  strip.text.x = ggplot2::element_text(size = 12),
-  panel.grid.major = ggplot2::element_line(colour = "#D0D0D0", size = .25),
-  panel.background = ggplot2::element_rect(fill = "white"),
-  legend.text = ggplot2::element_text(size = 12),
-  legend.title = ggplot2::element_text(size = 12) )
-
-### Simulations ###
-confounding = seq(-0.9, 0.9, by = 0.2)
-replications = 3
-coefficients = c()
-
-for(c in confounding){
-  for(r in 1:replications){
-  dat = simulate_observed_clr(waves = 2, sample.nobs = 1000,
-                      stability.x = 0.75, stability.y = 0.75,
-                      contemporaneous.x = 0, cross.x = 0.15,
-                      beta.z = 0, beta.u = c,
-                      var.y = 1, var.x = 1,
-                      cov.xy = 0.5, cov.uz = 0.5)
-  coefs = lm(y2 ~ -1 +  x1 + y1, data = dat$data)$coefficients
-  #coefs = cbind(coefs, c, r)
-  coefficients = rbind(coefficients, coefs)
-  }
-}
-coefficients %>% as_tibble() %>%
-  mutate(confounding = rep(confounding, each = replications)) %>%
-  ggplot(aes(x = confounding, y = x1)) +
-  geom_jitter(width = 0.02, height = 0.02, alpha = 0.3, color = "darkgrey") +
-  geom_smooth() +
-  labs(title = "Effect of unobserved confounder", x = "Unobserved confounder effect", y = "Coefficient for the cross lagged effect, x1 on y2") + ggtheme +
-  # plot a horizontal line at 0.3
-  geom_hline(yintercept = 0.15, linetype = "dashed", color = "black") +
-  # add confidence band
-# Add a label that says, "true value"
-  geom_text(aes(x = 0, y = 0.17, label = "True Value"), hjust = 0, vjust = 0, size = 5, color = "black") +
-  theme(legend.position = "none")
-```
-
-## RI-CLPM
-
-Let's reshape the data from wide to long, using reshapeLong from the package. This is useful to structure the simulated data.
-
-```{r}
-dat = simulate_observed_clr(waves = 5, 
-                      sample.nobs = 1000, 
-                      stability.x = 0.90, 
-                      stability.y = 0.90, 
-                      contemporaneous.x = 0, 
-                      cross.x = 0.15, 
-                      beta.z = 0, 
-                      beta.u = 0.5, 
-                      var.y = 1,
-                      var.x = 1, 
-                      cov.xy = 0.5, 
-                      cov.uz = 0.5)$data
-
-```
-
-```{r}
-# Estimate lmer
-dat_long = reshape_long_sim_cr(dat)
-head(dat_long)
-```
-
-```{r}
-# Fit the brms model
-library(brms)
-fit = brm(y ~ -1 +  xlag + ylag + (1|id), data = dat_long)
-summary(fit)
-```
-
-Obviously this is quite a bit different from the true parameter values. The stability coefficient should be 0.9; the cross-lag should be 0.15. Matters are substantially more problematic when the contemporaneous effect is present in the DGP. Again, this opens a colliding path for $y$ biasing the coefficients.
-
-
-
-dat_long = reshape_long_sim_cr(dat) brm(y \~ -1 + xlag + ylag + (1\|id), data = dat_long)
