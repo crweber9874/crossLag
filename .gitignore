@@ -3,3 +3,8 @@
 .RData
 .Ruserdata
 inst/doc
+figure-html
+~/figure-revealjs
+~/libs/revealjs/
+~/bakker_data/
+presentations

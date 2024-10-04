@@ -33,8 +33,8 @@ simulate_riclpm = function(
 
                 #Intercepts
                 for(w in 1:waves){
-                  model_string <- paste0(model_string, "\nx", w, " ~ mu", w, "*1",
-                                                       "\ny", w, " ~ pi", w, "*1")
+                  model_string <- paste0(model_string, "\nx", w, " ~ mu", w, "*0",
+                                                       "\ny", w, " ~ pi", w, "*0")
 
                 }
 
@@ -67,8 +67,8 @@ simulate_riclpm = function(
                 }
 
                 for(w in 1:waves){
-                  model_string <- paste0(model_string, "\n p", w, " ~ ", 1,"  * U",
-                                                       "\n q", w, " ~ ", 1, " * U")
+                  model_string <- paste0(model_string, "\n p", w, " ~ ", 0,"  * U",
+                                                       "\n q", w, " ~ ", 0, " * U")
 
                 }
 

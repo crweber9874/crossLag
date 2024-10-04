@@ -123,10 +123,10 @@ simulate_latent_change_multiple= function(
   # Constant change factor covariance with the initial true score
   model_string <- paste0(model_string, "    general_x ~~", cov.change.true_x, "*cf_x1\n")
 
-  # # Proportional effects (constrained equal)
-  # for(w in 2:waves){
-  #   model_string <- paste0(model_string, "    ld_x", w, " ~ ", proportion.change_x,"* cf_x", w-1, "\n")
-  # }
+  # Proportional effects (constrained equal)
+  for(w in 2:waves){
+    model_string <- paste0(model_string, "    ld_x", w, " ~ ", proportion.change_x,"* cf_x", w-1, "\n")
+  }
 
   # Define the common factors
   for(w in 1:waves){
@@ -190,10 +190,10 @@ simulate_latent_change_multiple= function(
   # Constant change factor covariance with the initial true score
   model_string <- paste0(model_string, "    general_y ~~", cov.change.true_y, "*cf_y1\n")
 #
-#   # Proportional effects (constrained equal)
-#   for(w in 2:waves){
-#     model_string <- paste0(model_string, "    ld_y", w, " ~ ", proportion.change_y,"* cf_y", w-1, "\n")
-#   }
+  # Proportional effects (constrained equal)
+  for(w in 2:waves){
+    model_string <- paste0(model_string, "    ld_y", w, " ~ ", proportion.change_y,"* cf_y", w-1, "\n")
+  }
 
   ## Combining models
 

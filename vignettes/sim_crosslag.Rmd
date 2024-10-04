@@ -11,6 +11,325 @@ library(lavaan)
 library(crossLag)
 library(ggplot2)
 library(tibble)
+library(gganimate)
+```
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+## This works reasonably well, though rcpp optimized code would be faster
+# 500 simulations
+# Varying the nature of change in the graph
+# monteCarlo(
+#   trials = 100,
+#   model = "ols",
+#   data_generation = "latent-change-xy",
+#   waves = 5,
+#   proportion.change_x = seq(0, 0.8, by = 0.2),
+#   proportion.change_y = seq(0, 0.8, by = 0.2),
+#   change.mean_x       = seq(0, 0.8, by = 0.2),
+#   change.mean_y       = seq(0, 0.8, by = 0.2),
+#   coupling_xy         = 0,
+#   coupling_yx         = 0,
+# ) -> latentDat
+
+# RI-CLPM, vary the stability of the within-person change
+
+ monteCarlo(
+  trials = 1000,
+  model = "ols",
+  data_generation = "ri-clpm",
+  within_person_stability_x = c(-.75, -0.25, 0, 0.25, 0.75),
+  within_person_stability_y = c(-.75, -0.25, 0, 0.25, 0.75),
+  cross.p = 0,
+  cross.q = 0,
+  waves = 5,
+  confound = 0
+)  -> riDat
+# dat = list(latentDat, riDat)
+# https://gganimate.com/articles/gganimate.html
+save(riDat, file = "~/Dropbox/github_repos/crossLag_p/crossLag/tmp/sim_crosslag.RData")
+```
+
+```{r}
+load("~/Dropbox/github_repos/crossLag_p/crossLag/tmp/sim_crosslag.RData")
+# graphics
+riDat 
+```
+
+# Fixing the lagged values
+
+## Fix person stability in x at 0, vary y
+
+
+```{r}
+library(dplyr)
+library(ggridges)
+riDat %>% 
+  filter(within_person_stability_x == 0 ) %>%
+  ggplot(aes(x = xlag, fill = as.factor(round(within_person_stability_x, 2)), y = as.factor(round(within_person_stability_y, 2)))) +
+  geom_density_ridges2(
+    alpha = 0.25, 
+    scale = 1, 
+    show.legend = FALSE, 
+    quantile_lines = TRUE,  
+    rel_min_height = 0.01,
+    quantiles = 0.5,  
+    calc_ecdf = FALSE,
+    jittered_points = TRUE, 
+    position = position_points_jitter(width = 0.05, height = 0),
+    point_shape = 3, 
+    point_size = 1, 
+    point_color = "darkgrey", 
+    point_alpha = 0.01,
+    fill = "purple",
+    color = NA  # Remove the outline
+
+  ) +
+  scale_x_continuous("", limits = c(-0.25, 0.25)) +
+  scale_y_discrete("") + 
+  theme_minimal()  +
+  # Draw a vertical line at 0 that is dashed, use abline
+  geom_vline(xintercept = 0, linetype = "dashed", color = "black") + 
+  geom_hline(yintercept = 3, linetype = "dashed", color = "black") +
+  annotate("text", x = 0, y = 3, label = "True Value ", hjust = 0) +
+  ggtitle(expression("Simulations varying within-person stability, " * beta * "")) +
+  # Style the plot 
+  theme(
+    plot.title = element_text(size = 20, face = "bold"),
+    axis.title = element_text(size = 15, face = "bold"),
+    axis.text = element_text(size = 12),
+    legend.title = element_text(size = 15, face = "bold"),
+    legend.text = element_text(size = 12)
+  )
+
+```
+
+## Fix person stability in y at 0, vary x
+
+
+```{r}
+library(dplyr)
+library(ggridges)
+riDat %>% 
+  filter(within_person_stability_y == 0 ) %>%
+  ggplot(aes(x = xlag, fill = as.factor(round(within_person_stability_x, 2)), y = as.factor(round(within_person_stability_x, 2)))) +
+  geom_density_ridges2(
+    alpha = 0.25, 
+    scale = 1, 
+    show.legend = FALSE, 
+    quantile_lines = TRUE,  
+    rel_min_height = 0.01,
+    quantiles = 0.5,  
+    calc_ecdf = FALSE,
+    jittered_points = TRUE, 
+    position = position_points_jitter(width = 0.05, height = 0),
+    point_shape = 3, 
+    point_size = 1, 
+    point_color = "darkgrey", 
+    point_alpha = 0.01,
+    fill = "purple",
+    color = NA  # Remove the outline
+
+  ) +
+  scale_x_continuous("", limits = c(-0.25, 0.25)) +
+  scale_y_discrete("") + 
+  theme_minimal()  +
+  # Draw a vertical line at 0 that is dashed, use abline
+  geom_vline(xintercept = 0, linetype = "dashed", color = "black") + 
+  geom_hline(yintercept = 3, linetype = "dashed", color = "black") +
+  annotate("text", x = 0, y = 3, label = "True Value ", hjust = 0) +
+  ggtitle(expression("Simulations varying within-person stability, " * alpha * "")) +
+  # Style the plot 
+  theme(
+    plot.title = element_text(size = 20, face = "bold"),
+    axis.title = element_text(size = 15, face = "bold"),
+    axis.text = element_text(size = 12),
+    legend.title = element_text(size = 15, face = "bold"),
+    legend.text = element_text(size = 12)
+  )
+
+```
+
+## Demonstrate the Full Effect
+```{r}
+library(gganimate)
+
+p = riDat %>% 
+  ggplot(aes(x = xlag, fill = as.factor(round(within_person_stability_x, 2)), y = as.factor(round(within_person_stability_x, 2)))) +
+  geom_density_ridges2(
+    alpha = 0.25, 
+    scale = 1, 
+    show.legend = FALSE, 
+    quantile_lines = TRUE,  
+    rel_min_height = 0.01,
+    quantiles = 0.5,  
+    calc_ecdf = FALSE,
+    jittered_points = TRUE, 
+    position = position_points_jitter(width = 0.05, height = 0),
+    point_shape = 3, 
+    point_size = 1, 
+    point_color = "darkgrey", 
+    point_alpha = 0.01,
+    fill = "purple",
+    color = NA  # Remove the outline
+
+  ) +
+  scale_x_continuous("", limits = c(-0.25, 0.25)) +
+  scale_y_discrete("") + 
+  theme_minimal()  +
+  # Draw a vertical line at 0 that is dashed, use abline
+  geom_vline(xintercept = 0, linetype = "dashed", color = "black") + 
+  geom_hline(yintercept = 3, linetype = "dashed", color = "black") +
+  annotate("text", x = 0, y = 3, label = "True Value ", hjust = 0) +
+  ggtitle(expression("Simulations varying within-person stability, " * alpha * "")) +
+  # Style the plot 
+  theme(
+    plot.title = element_text(size = 20, face = "bold"),
+    axis.title = element_text(size = 15, face = "bold"),
+    axis.text = element_text(size = 12),
+    legend.title = element_text(size = 15, face = "bold"),
+    legend.text = element_text(size = 12)
+  ) + 
+ transition_time(within_person_stability_y) +
+      ease_aes('linear')
+animate(p)
+```
+
+```{r}
+library(gapminder)
+library(ggplot2)
+library(gganimate)
+
+# Define the plot
+p <- ggplot(gapminder, aes(gdpPercap, lifeExp, size = pop, colour = country)) +
+    geom_point(alpha = 0.7, show.legend = FALSE) +
+    scale_colour_manual(values = country_colors) +
+    scale_size(range = c(2, 12)) +
+    scale_x_log10() +
+    facet_wrap(~continent) +
+    labs(title = 'Year: {frame_time}', x = 'GDP per capita', y = 'life expectancy') +
+    transition_time(year) +
+    ease_aes('linear')
+
+# Render the animation
+animation <- animate(p)
+```
+
+```{r}
+library(dplyr)
+library(ggridges)
+riDat %>% 
+  filter(within_person_stability_y == 0 ) %>%
+  ggplot(aes(x = xlag, y = as.factor(round(within_person_stability_x, 1)))) +
+  geom_density_ridges2(
+    alpha = 0.25, 
+    scale = 1, 
+    show.legend = FALSE, 
+    quantile_lines = TRUE,  
+    rel_min_height = 0.01,
+    quantiles = 0.5,  
+    calc_ecdf = FALSE,
+    jittered_points = TRUE, 
+    position = position_points_jitter(width = 0.05, height = 0),
+    point_shape = 3, 
+    point_size = 1, 
+    point_color = "darkgrey", 
+    point_alpha = 0.01,
+    fill = "purple",
+    color = NA  # Remove the outline
+
+  ) +
+  scale_x_continuous("", limits = c(-.75, 0.75)) +
+  scale_y_discrete("") + 
+  theme_minimal()  +
+  # Draw a vertical line at 0 that is dashed, use abline
+  geom_vline(xintercept = 0, linetype = "dashed", color = "black") + 
+  geom_hline(yintercept = 8, linetype = "dashed", color = "black") +
+  annotate("text", x = 0.10, y = 8, label = "True Value ", hjust = 0) +
+  # Add a large title
+  ggtitle("Simulated slopes varying \nwithin-person stability") +
+  # Style the plot 
+  theme(
+    plot.title = element_text(size = 20, face = "bold"),
+    axis.title = element_text(size = 15, face = "bold"),
+    axis.text = element_text(size = 12),
+    legend.title = element_text(size = 15, face = "bold"),
+    legend.text = element_text(size = 12)
+  ) + 
+    labs(
+    title = expression("Simulations varying within-person stability, " * beta * ""),
+  ) 
+```
+
+```{r}
+library(dplyr)
+library(ggridges)
+dat[[1]] %>% 
+  ggplot(aes(x = xlag, color = as.character(proportion_change_x), y = as.factor(proportion_change_y))) +
+  geom_density_ridges2(
+    alpha = 0.25, 
+    scale = 1, 
+    show.legend = FALSE, 
+    quantile_lines = TRUE,  
+    rel_min_height = 0.01,
+    quantiles = 0.5,  
+    calc_ecdf = FALSE,
+    jittered_points = TRUE, 
+    position = position_points_jitter(width = 0.05, height = 0),
+    point_shape = 3, 
+    point_size = 1, 
+    point_color = "darkgrey", 
+    point_alpha = 0.01,
+    fill = "purple"
+  ) +
+  scale_x_continuous("", limits = c(0, 0.10)) +
+  scale_y_discrete("") + 
+  theme_minimal() #
+                 
+```
+
+```{r}
+library(tidyr)
+# Filter the data
+filtered_data <- dat[[1]] %>%
+  filter(change.mean_y == 0 & change.mean_x == 0 & proportion_change_y == 0.8)
+
+
+library(dplyr)
+library(plotly)
+
+# Load the data
+load("~/Dropbox/github_repos/crossLag_p/crossLag/tmp/sim_crosslag.RData")
+
+# Filter the data
+filtered_data <- dat[[1]] %>%
+  filter(change.mean_y == 0 & change.mean_x == 0 & proportion_change_y == 0.8)
+
+# Compute density estimates for each group
+densities <- filtered_data %>%
+  group_by(proportion_change_x) %>%
+  do({
+    dens <- density(.$xlag, n = 512)
+    data.frame(x = dens$x, y = dens$y, proportion_change_x = .$proportion_change_x[1])
+  })
+
+# Create the joy plot in Plotly
+plot_ly() %>%
+  add_trace(
+    data = densities,
+    x = ~x,
+    y = ~y + as.numeric(as.factor(proportion_change_x)),
+    type = 'scatter',
+    mode = 'lines',
+    fill = 'tozeroy',
+    fillcolor = 'rgba(128, 0, 128, 0.25)',
+    line = list(color = 'purple')
+  ) %>%
+  layout(
+    title = "Joy Plot",
+    xaxis = list(title = "X Lag", range = c(0, 0.10)),
+    yaxis = list(title = "Proportion Change X", type = 'category', tickvals = unique(as.numeric(as.factor(densities$proportion_change_x))), ticktext = unique(densities$proportion_change_x)),
+    showlegend = FALSE
+  )
 ```
 
 ```{r}
