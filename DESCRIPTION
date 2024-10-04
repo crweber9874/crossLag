@@ -1,9 +1,9 @@
 Package: crossLag
-Type: 
-Title: 
+Type: Package
+Title: Latent variable models for estimating cross-lagged effects in R 
 Version: 0.1.0
 Author: Christopher Weber
-Maintainer: Christopher Weber: <chrisweber@arizona.edu>
+Maintainer: Christopher Weber <chrisweber@arizona.edu>
 Description: This package accompanies Weber et al (2024) and contains the functions used to generate the results in the paper. The package contains a series of functions that wrap the brms package and generate the models used in the paper. The package also contains the data used in the paper.
 License: MIT + file LICENSE
 Encoding: UTF-8
@@ -21,6 +21,6 @@ Imports:
   stringr,
   ggridges
 Suggests:
-    knitr,
-    rmarkdown
+  knitr,
+  rmarkdown
 VignetteBuilder: knitr

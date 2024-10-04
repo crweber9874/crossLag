@@ -28,10 +28,22 @@
     <loc>/reference/index.html</loc>
   </url>
   <url>
+    <loc>/reference/model_syntax_change.html</loc>
+  </url>
+  <url>
     <loc>/reference/model_syntax_clpm.html</loc>
   </url>
   <url>
+    <loc>/reference/monteCarlo.html</loc>
+  </url>
+  <url>
     <loc>/reference/reshape_long_sim_cr.html</loc>
+  </url>
+  <url>
+    <loc>/reference/simulate_latent_change_multiple.html</loc>
+  </url>
+  <url>
+    <loc>/reference/simulate_latent_change_single.html</loc>
   </url>
   <url>
     <loc>/reference/simulate_observed_clr.html</loc>

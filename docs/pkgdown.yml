@@ -2,7 +2,6 @@ pandoc: '3.2'
 pkgdown: 2.0.9
 pkgdown_sha: ~
 articles:
-  bakker: bakker.html
   simulation: simulation.html
-last_built: 2024-10-04T21:49Z
+last_built: 2024-10-04T22:05Z
 

@@ -17,9 +17,10 @@
 #'    * `model`: The Lavaan model syntax used for data simulation.
 #'    * `data`:  The simulated data in a data frame format.
 #'
-
 #' @export
-#'
+
+
+
 simulate_latent_change_single= function(
     waves = 10,
     latent.true.variance = 1,
