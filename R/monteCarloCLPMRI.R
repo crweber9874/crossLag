@@ -1,4 +1,4 @@
-#' Generate model syntax for a cross-lagged panel model, with or without random intercepts
+#' Run Monte Carlo simulations for CLPM, RI-CLPM, and Dual Change Models
 #'
 #' @param trials The number of trials for the Monte Carlo simulation.
 #' @param waves The number of waves (time points) in the model.

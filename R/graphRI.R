@@ -1,4 +1,16 @@
-library(tidySEM)
+#'  Draw a tidySEM graph of a RI-CLPM model
+#'
+#' Create a simulated dataset of a cross-lagged model with a specified number of waves and structural parameters.
+#'
+#' @param fit A fitted lavaan model object.
+#' @param waves Number of waves in the fitted model.
+#'
+#' @return SEM plot
+#'
+#' @export
+#'
+#'
+#'
 ri_graph = function(model = fit, waves = c(3,4,5,6)){
   if (waves <3 | waves >6){
     print('Please choose a wave length of between 3 and 6. Otherwise, the graph gets muddled')
@@ -47,16 +59,16 @@ ri_graph = function(model = fit, waves = c(3,4,5,6)){
       ""  ,     ""  ,   "",  "omega", "",        "",
       rows =7)
   }
-  graphData = prepare_graph(model, layout = layout)
+  graphData = tidySEM::prepare_graph(model, layout = layout)
 
-  edges(graphData) %>%
+  tidySEM::edges(graphData) %>%
     mutate(
-      label = ifelse(op == "~~", "", "")) -> edges(graphData)
+      label = ifelse(op == "~~", "", "")) -> tidySEM::edges(graphData)
 
   graphData %>%
-    edit_graph({
+    tidySEM::edit_graph({
       label_color <- "black"  # Set label color to blue
-    })  %>%plot()
+    })  %>% plot()
 
 }
 
@@ -65,7 +77,7 @@ ri_graph = function(model = fit, waves = c(3,4,5,6)){
 #      %>%   dplyr::select(-kappa, -omega, -U))
 #
 ## This is the way to structure the plot
-# lavaan::lavaan(model_syntax_clpm(waves = 4, model_type = "ri-clpm"),
+# lavaan::lavaan(model_syntax_cl  pm(waves = 4, model_type = "ri-clpm"),
 #                      simulate_riclpm(waves = 4, sample.nobs = 15000)$data
 #                      %>%   dplyr::select(-U)) %>% ri_graph(waves = 4)
 

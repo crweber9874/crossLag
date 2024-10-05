@@ -19,8 +19,8 @@
 #'
 simulate_riclpm = function(
          waves = 10,
-         stability.p = 0.9,
-         stability.q = 0.9,
+         stability.p = 0.5,
+         stability.q = 0.5,
          cross.p = 0.1,
          cross.q = 0.1,
          variance.p = 1,

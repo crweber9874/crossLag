@@ -16,7 +16,7 @@ devtools::install_github("crweber9874/crossLag")
 
 ### Summary
 
-This package develops an analytic framework to analyze panel data in the tradition of the Cross Lagged Panel Model -- the CLPM. This repository contains code written by Stanley Feldman, Adam Parish and Chris Weber to critique and improve upon the cross lag regression.
+This package develops an analytic framework to analyze panel data in the tradition of the Cross Lagged Panel Model -- the CLPM. This repository contains code written by Stanley Feldman, Adam Panish, Bang Zheng and Chris Weber to improve upon designs using the CLPM.
 
 The **Cross-Lagged Panel Model (CLPM)** model was pioneered in Campbell (1963) as well as Campbell and Stanley (1963) and is an oft used, intuitive method to test **competing causal processes**. The model requires the estimation of lagged effects, including a lag of the dependent variable. By analyzing the lagged effects (the influence of one variable on the other at a later time point), researchers often purport to gain insights into the direction and strength of causal relationships.
 
