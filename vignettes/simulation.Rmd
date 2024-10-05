@@ -73,10 +73,10 @@ ggdag(g, text = TRUE) + theme_dag() + ggtitle("Figure 1: The Cross-Lagged Regres
 
 The CLPM is a variant of the Autoregressive Distributed Lag model used in econometrics, and the causal mechanism identified is often referred to as Granger Causality. Granger causality is a concept that means that if $x$ measured at time $t-1$ predicts $y$ at time $t$, then $x$ Granger causes $y$. The CLPM can be written as
 
-$$
-y_{t=2, i}=a_0 + a_1 y_{t=1, i} + a_2 x_{t=1, i} + e_{1,i} \hspace{1in} (1)\\
 
-x_{t=2, i}=b_0 + b_1 y_{t=1, i} + b_2 x_{t=1, i} + e_{2,i} \hspace{1in} (2)\\
+$$y_{t, i}=a_0 + a_1 y_{t-1, i} + a_2 x_{t-1, i} + e_{1,i} 
+
+    x_{t, i}=b_0 + b_1 y_{t-1, i} + b_2 x_{t-1, i} + e_{2,i}
 $$
 
 
@@ -92,9 +92,9 @@ As an example, let'se focus here primarily on its applicability in political psy
 
 ## Complicated Effects
 
-$$
-      y_{t, i}=a_0 + a_1 y_{t-1, i} + a_2 x_{t-1, i} + e_{1,i} \\
-      x_{t, i}=b_0 + b_1 y_{t-1, i} + b_2 x_{t-1, i} + e_{2,i}
+$$y_{t, i}=a_0 + a_1 y_{t-1, i} + a_2 x_{t-1, i} + e_{1,i} 
+
+    x_{t, i}=b_0 + b_1 y_{t-1, i} + b_2 x_{t-1, i} + e_{2,i}
 $$
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE, fig.width=10, fig.height=10}
@@ -196,6 +196,7 @@ monteCarlo(
     sample_size = 1000) %>% head()
 ```
 
+
 ## Fit a Cross-Lagged Panel Model
 
 Simulate data
@@ -210,9 +211,25 @@ simulate_riclpm(
          cross.q = 0.1,
          variance.p = 1,
          variance.q = 1,
-         cov.pq = 0.5) %>% head()
+         cov.pq = 0.5)$data %>% head()
 ```
 
+Each call returns a list, with one element $\texttt{data}$ and one $\texttt{model}$
+
+```{r}
+
+simulate_riclpm(
+         waves = 4,
+         stability.p = 0.9,
+         stability.q = 0.9,
+         cross.p = 0.1,
+         cross.q = 0.1,
+         variance.p = 1,
+         variance.q = 1,
+         cov.pq = 0.5)$model %>% cat()
+```
+
+Fit a RI-CLPM
 ```{r}
 dat = simulate_riclpm(
          waves = 4,
