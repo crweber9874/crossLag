@@ -21,6 +21,7 @@ suppressMessages(library(ggdag))
 suppressMessages(library(ggplot2))
 suppressMessages(library(ggridges))
 suppressMessages(library(gganimate))
+suppressMessages(library(crossLag))
 
 ```
 

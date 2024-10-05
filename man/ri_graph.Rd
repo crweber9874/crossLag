@@ -7,7 +7,7 @@
 ri_graph(model = fit, waves = c(3, 4, 5, 6))
 }
 \arguments{
-\item{waves}{Number of waves in the fitted model}
+\item{waves}{Number of waves in the fitted model.}
 
 \item{fit}{A fitted lavaan model object.}
 }

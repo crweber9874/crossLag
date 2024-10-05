@@ -2,7 +2,7 @@
 % Please edit documentation in R/monteCarloCLPMRI.R
 \name{monteCarlo}
 \alias{monteCarlo}
-\title{Generate model syntax for a cross-lagged panel model, with or without random intercepts}
+\title{Run Monte Carlo simulations for CLPM, RI-CLPM, and Dual Change Models}
 \usage{
 monteCarlo(
   trials = 100,
@@ -45,5 +45,5 @@ monteCarlo(
 A data frame containing the results of the simulation.
 }
 \description{
-Generate model syntax for a cross-lagged panel model, with or without random intercepts
+Run Monte Carlo simulations for CLPM, RI-CLPM, and Dual Change Models
 }
