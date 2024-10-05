@@ -13,7 +13,7 @@ vignette: >
 
 It is difficult to sort out causal mechanisms with cross-sectional observational data, panel and cross sectional. Causal relationships require careful theorizing about the data generating process. Data, particularly when observational, and statistical procedures do not guarantee that researcher will identify a causal mechanism.
 
-```{r}
+```{r setup, include = FALSE}
 suppressMessages(library(dplyr))
 suppressMessages(library(haven))
 suppressMessages(library(dagitty))
@@ -22,7 +22,6 @@ suppressMessages(library(ggplot2))
 suppressMessages(library(ggridges))
 suppressMessages(library(gganimate))
 suppressMessages(library(crossLag))
-
 ```
 
 ## The Cross Lagged Panel Model
