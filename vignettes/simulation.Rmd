@@ -9,7 +9,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-## The Cross Lagged Regression Model
+## The Cross Lagged Panel Model (CLPM)
 
 It is difficult to sort out causal mechanisms with cross-sectional observational data, panel and cross sectional. Causal relationships require careful theorizing about the data generating process. Data, particularly when observational, and statistical procedures do not guarantee that researcher will identify a causal mechanism.
 
@@ -23,8 +23,6 @@ suppressMessages(library(ggridges))
 suppressMessages(library(gganimate))
 suppressMessages(library(crossLag))
 ```
-
-## The Cross Lagged Panel Model
 
 The CLPM is common in many social science applications, particularly in longitudinal, observational research designs.
 
