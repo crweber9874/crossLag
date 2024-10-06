@@ -1,5 +1,5 @@
 ---
-title: "A Brief Overview of Simulation in the crossLag Package"
+title: "Simulation and the crossLag Package"
 author: "Christopher Weber"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -11,7 +11,7 @@ vignette: >
 
 ## The Cross Lagged Panel Model (CLPM)
 
-It is difficult to sort out causal mechanisms with cross-sectional observational data, panel and cross sectional. Causal relationships require careful theorizing about the data generating process. Data, particularly when observational, and statistical procedures do not guarantee that researcher will identify a causal mechanism.
+It is difficult to tease out causal mechanisms with cross-sectional observational data, panel and cross sectional. Causal relationships require careful theorizing about the data generating process. Data, particularly when observational, and statistical procedures do not guarantee that researcher will identify a causal mechanism.
 
 ```{r setup, include = FALSE}
 suppressMessages(library(dplyr))
@@ -26,7 +26,7 @@ suppressMessages(library(crossLag))
 
 The CLPM is common in many social science applications, particularly in longitudinal, observational research designs.
 
-The design is straightforward, motivated by the difficulty in figuring out whether $X \rightarrow Y$, $Y \rightarrow X$. It's also a common design in practice (Federico and Gole De Zavala 2023; Craemer 2008; Claasen 2008; Hatemi, Crabtree and Smith 2019; Hetherington and Globeti 2002; Luttig 2021, Klandermans 2004; Lupu 2015; Goren and Chapp 2017; Layman and Carsey 2002; Putz 2002; Tilley, Neundor and Hobolt 2018; Sibley and Duckitt 2010, among many others)
+The design is straightforward. Does $X \rightarrow Y$, or does $Y \rightarrow X$? It's also a common design in practice (Federico and Gole De Zavala 2023; Craemer 2008; Claasen 2008; Hatemi, Crabtree and Smith 2019; Hetherington and Globeti 2002; Luttig 2021, Klandermans 2004; Lupu 2015; Goren and Chapp 2017; Layman and Carsey 2002; Putz 2002; Tilley, Neundor and Hobolt 2018; Sibley and Duckitt 2010, among many others)
 
 ## Political Psychology Examples
 
@@ -49,7 +49,7 @@ The design is straightforward, motivated by the difficulty in figuring out wheth
 </div>
 
 
-Yet, it is not uncommon for researchers to use statistical techniques to identify causal mechanisms, occasionally with very little theorizing about the data generating process. One such statistical technique is the cross-lagged panel model (CLPM). The CLPM is a variant of the Autoregressive Distributed Lag model used in econometrics, and the identified causal mechanism is a particular type of causality, Granger Causality. The reasoning is both simple and elegant. The notion is that if one measures $x$ at time $t-1$ and $t$, and $y$ at time $t-1$ and $t$, then one estimates a model that predicts $y_{t}$ from $x_{t-1}$ and $y_{t-1}$, and an additional model where $x_{t}$ is predicted from $y_{t-1}$ and $x_{t-1}$. The temporal ordering of the data is then used to identify causal relationships. Although one may not be able to manipulate $x$ and $t$ -- to rule out spurious relationships -- if $x$ measured in the past predicts $y$ in the present, but $y$ measured in the past doesn't predict $x$ in the present, one can be reasonably certain that the causal ordering is such that $x$ affects $y$ and $y$ does not affect $x$. Graphically, the model can be represented as a Directed Acyclic Graph (DAG, Pearl 2001).
+Yet, it is not uncommon for researchers to use statistical techniques to identify causal mechanisms, occasionally with very little theorizing about the data generating process. One such statistical technique is the cross-lagged panel model (CLPM). The CLPM is a variant of the Autoregressive Distributed Lag model used in econometrics, and the identified causal mechanism is a particular type of causality, Granger Causality. The reasoning is simple. The notion is that if one measures $x$ at time $t-1$ and $t$, and $y$ at time $t-1$ and $t$, then one estimates a model that predicts $y_{t}$ from $x_{t-1}$ and $y_{t-1}$, and an additional model where $x_{t}$ is predicted from $y_{t-1}$ and $x_{t-1}$. The temporal ordering of the data is then used to identify causal relationships. Although one may not be able to manipulate $x$ and $t$ -- to rule out spurious relationships -- if $x$ measured in the past predicts $y$ in the present, but $y$ measured in the past doesn't predict $x$ in the present, one can be reasonably certain that the causal ordering is such that $x$ affects $y$ and $y$ does not affect $x$. Graphically, the model can be represented as a Directed Acyclic Graph (DAG, Pearl 2001).
 
 ```{r, fig.width=6, fig.height=4, out.width="40%"}
 library(dagitty)
@@ -80,13 +80,11 @@ $$
 
 The conclusions from the CLPM attempts to leverage the temporal order in which variables are observed. If one were to estimate these two equations using traditional regression techniques, a large $a_2$ coefficient represents a causal relationship from $x_1\rightarrow y_2$; whereas a large $b_2$ coefficient translates to reversed effect, i.e., $y_1 \rightarrow x_2$. If $a_2$ is large and $b_2$ is effectively zero, it is tempting to conclude that $x$ causes $y$ but $y$ does not cause $x$. In both cases, we include the lagged value of the dependent variable, $y_{t-1, i}$ and $x_{t-1, i}$, to control for the effect of the dependent variable; each unit serves as their own control, or baseline. Should $a_2$ or $b_2$ reach conventional levels of statistical significance, it is tempting to conclude that a causal effect has been identified. Economists refer to this as Granger Causality, which is a statistical test of whether the lagged value of the independent variable can predict the dependent variable after controlling for the lagged value of the dependent variable.
 
-While the reasoning is simple, rather strong assumptions about the data generating process must be made.. There several issues that arise upon estimating this model. The first pertains to the empirical consequence of including a lagged realization of the independent variable in the regression model, rather than contemporaneous effects; the the second issue pertains to inclusion of a lagged dependent variable (Allison 1990); and the third revolves around the identification of causal effects, particularly when there are unobserved confounders and stable unit effects.
+While the reasoning is simple, rather strong assumptions about the data generating process must be made. There several issues that arise upon estimating this model. The first pertains to the empirical consequence of including a lagged realization of the independent variable in the regression model, rather than contemporaneous effects; the the second issue pertains to inclusion of a lagged dependent variable (Allison 1990); and the third revolves around the identification of causal effects, particularly when there are unobserved confounders and stable unit effects.
 
 ## Political Psychology, Personality and Politics
 
 As an example, let'se focus here primarily on its applicability in political psychology, exploring the relationship between  **Personality and Politics** (Luttig 2021; Bakker, Lelkes, and Malke 2021). It's common to use the CLPM in these settings, or propose doing so. Weber and Federico (2007) note,
-
-> Although we assume that general psychological orientations like anxiety and avoidance should be causally prior to worldviews and ideology—like other researchers in this area (e.g., Jost et al., 2003)—longitudinal data would provide a less-ambiguous pattern of support for this assumption. For example, panel data on all relevant constructs would allow us to examine the strength of competing causal patterns using a cross-lagged design (Finkel, 1995). Similarly, actual developmental data might allow us to see whether attachment patterns early in life are predictive of different worldviews and ideologies later on.
 
 ## Complicated Effects
 
@@ -172,9 +170,9 @@ anim
 ```
 
 
-## Simulating Data using $\texttt{monteCarloCLPMRI}
+## Simulating Data using $\texttt{monteCarloCLPMRI}$
 
-Simulate five trials, of a three wave panel, with no cross lag effects, weak with person stability, and no confounding.
+Simulate five trials, of a three wave panel, with no cross lag effects, weak with person stability, and no confounding. The $\texttt{monteCarlo}$ function simulates data under several DGP models: The "clpm," the "ri-clpm," and the "dual-change" model. The simulation wrapper estimates an OLS with lagged independent and dependent variables.
 
 ```{r}
 library(crossLag)
@@ -193,11 +191,9 @@ monteCarlo(
     variance_y = 1,
     sample_size = 1000) %>% head()
 ```
-
-
 ## Fit a Cross-Lagged Panel Model
 
-Simulate data
+There are a number of data simulation functions in the package. One is the random-intercept cross-lagged panel regression. The function creates the lavaan syntax and simulates data from $\texttt{lavaan}$.
 
 ```{r}
 
@@ -212,7 +208,7 @@ simulate_riclpm(
          cov.pq = 0.5)$data %>% head()
 ```
 
-Each call returns a list, with one element $\texttt{data}$ and one $\texttt{model}$
+Each call returns a list, with one element $\texttt{data}$ and one $\texttt{model}$. So, for example, here is the syntax for a four wave dataset.
 
 ```{r}
 
@@ -227,7 +223,8 @@ simulate_riclpm(
          cov.pq = 0.5)$model %>% cat()
 ```
 
-Fit a RI-CLPM
+We can then fit the model using $\texttt{lavaan}$.
+
 ```{r}
 dat = simulate_riclpm(
          waves = 4,
@@ -244,7 +241,7 @@ dat <- dat %>% select(-omega, -kappa)
 lavaan::lavaan(model_syntax_clpm(waves = 4, model_type = "ri-clpm"), data= dat) 
 ```
 
-I used the $\texttt{monteCarlo}$ simulation function to vary within person stability -- jointly -- in x and y, 1000 times.  Here are the results fixing the cross-lag effect of x on y to 0.
+So, for instance, let's use the $\texttt{monteCarlo}$ simulation function to vary within person stability -- jointly -- in x and y, 1000 times.  Here are the results fixing the cross-lag effect of x on y to 0.
 
 ```{r}
 load("~/Dropbox/github_repos/crossLag_p/crossLag/tmp/sim_crosslag.RData")
@@ -332,12 +329,14 @@ riDat %>%
   )
 ```
 
-To examine them jointly, the following animation moves between autocorrelation in the two variables.
+Varying both $x$ xnd $y$. Each graph is a stability value for $y$, and the y-axis is the stability value for $x$.
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
-library(gganimate)
-p = riDat %>%
+load("~/Dropbox/github_repos/crossLag_p/crossLag/tmp/sim_crosslag.RData")
+library(ggridges)
+riDat %>%
   ggplot(aes(x = xlag, fill = as.factor(round(within_person_stability_x, 2)), y = as.factor(round(within_person_stability_x, 2)))) +
+  facet_wrap(~within_person_stability_y) +
   geom_density_ridges2(
     alpha = 0.25,
     scale = 1,
@@ -352,18 +351,18 @@ p = riDat %>%
     point_size = 1,
     point_color = "darkgrey",
     point_alpha = 0.01,
-    fill = "blue",
+    fill = "purple",
     color = NA  # Remove the outline
 
   ) +
-  scale_x_continuous("Stability in X", limits = c(-0.25, 0.25)) +
+  scale_x_continuous("", limits = c(-0.25, 0.25)) +
   scale_y_discrete("") +
   theme_minimal()  +
   # Draw a vertical line at 0 that is dashed, use abline
   geom_vline(xintercept = 0, linetype = "dashed", color = "black") +
   geom_hline(yintercept = 3, linetype = "dashed", color = "black") +
-  annotate("text", x = 0, y = 3, label = "True Value ", hjust = 0) +
-  ggtitle("Simulations varying within-person, stability") +
+  annotate("text", x = 0, y = 3, label = "True ", hjust = 0) +
+  ggtitle("Simulations") +
   # Style the plot
   theme(
     plot.title = element_text(size = 20, face = "bold"),
@@ -371,12 +370,55 @@ p = riDat %>%
     axis.text = element_text(size = 12),
     legend.title = element_text(size = 15, face = "bold"),
     legend.text = element_text(size = 12)
-  ) +
- transition_states(within_person_stability_y) +
-      ease_aes('linear') +
-  labs(title = "Within-person stability in y: {closest_state}") +
-  shadow_mark(alpha = 0.15)
-animate(p)
-
+  )
 ```
+
+
+<!-- To examine them jointly, the following animation moves between autocorrelation in the two variables. -->
+
+<!-- ```{r, echo = FALSE, message = FALSE, warning = FALSE} -->
+<!-- library(gganimate) -->
+<!-- p = riDat %>% -->
+<!--   ggplot(aes(x = xlag, fill = as.factor(round(within_person_stability_x, 2)), y = as.factor(round(within_person_stability_x, 2)))) + -->
+<!--   geom_density_ridges2( -->
+<!--     alpha = 0.25, -->
+<!--     scale = 1, -->
+<!--     show.legend = FALSE, -->
+<!--     quantile_lines = TRUE, -->
+<!--     rel_min_height = 0.01, -->
+<!--     quantiles = 0.5, -->
+<!--     calc_ecdf = FALSE, -->
+<!--     jittered_points = TRUE, -->
+<!--     position = position_points_jitter(width = 0.05, height = 0), -->
+<!--     point_shape = 3, -->
+<!--     point_size = 1, -->
+<!--     point_color = "darkgrey", -->
+<!--     point_alpha = 0.01, -->
+<!--     fill = "blue", -->
+<!--     color = NA  # Remove the outline -->
+
+<!--   ) + -->
+<!--   scale_x_continuous("Stability in X", limits = c(-0.25, 0.25)) + -->
+<!--   scale_y_discrete("") + -->
+<!--   theme_minimal()  + -->
+<!--   # Draw a vertical line at 0 that is dashed, use abline -->
+<!--   geom_vline(xintercept = 0, linetype = "dashed", color = "black") + -->
+<!--   geom_hline(yintercept = 3, linetype = "dashed", color = "black") + -->
+<!--   annotate("text", x = 0, y = 3, label = "True Value ", hjust = 0) + -->
+<!--   ggtitle("Simulations varying within-person, stability") + -->
+<!--   # Style the plot -->
+<!--   theme( -->
+<!--     plot.title = element_text(size = 20, face = "bold"), -->
+<!--     axis.title = element_text(size = 15, face = "bold"), -->
+<!--     axis.text = element_text(size = 12), -->
+<!--     legend.title = element_text(size = 15, face = "bold"), -->
+<!--     legend.text = element_text(size = 12) -->
+<!--   ) + -->
+<!--  transition_states(within_person_stability_y) + -->
+<!--       ease_aes('linear') + -->
+<!--   labs(title = "Within-person stability in y: {closest_state}") + -->
+<!--   shadow_mark(alpha = 0.15) -->
+<!-- animate(p) -->
+
+<!-- ``` -->
 

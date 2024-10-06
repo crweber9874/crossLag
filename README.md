@@ -1,4 +1,6 @@
-# $\texttt{crossLag}$: The Cross Lagged Regression Design
+# $\texttt{crossLag}$
+
+### The Cross Lagged Regression Model
 
 ### A package to estimate latent variable panel models and simulation designs
 
@@ -28,8 +30,9 @@ In the language of causal reasoning, the Directed Acyclic Graph (DAG) for the CL
 
 - $\texttt{~/R}$. The functions used in the simulation and R-package.
 
+- $\texttt{~/docs}$. Documentation for functions.
+
 - $\texttt{~/vignettes}$. Brief vignettes on data used in the simulation and the R-package.
 
 - $\texttt{~/presentations}$. Presentations on the CLPM and the R-package.
 
-- [SGPP Presentation, October 4, 2024](~/Dropbox/github_repos/crossLag_p/crossLag/presentations/sgpp_presentation24.html)
