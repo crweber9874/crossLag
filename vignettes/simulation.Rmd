@@ -4,7 +4,7 @@ author: "Christopher Weber"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{A Brief Overview of Simulation in the crossLag Package}
+  %\VignetteIndexEntry{Simulation and the crossLag Package}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
