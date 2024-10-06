@@ -19,7 +19,8 @@ Imports:
   ggdag,
   tidyverse,
   stringr,
-  ggridges
+  ggridges,
+  gganimate
 Suggests:
   knitr,
   rmarkdown
