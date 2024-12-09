@@ -7,5 +7,6 @@ figure-html
 ~/figure-revealjs
 ~/libs/revealjs/
 ~/bakker_data/
-presentations
 tmp
+archive
+presentations

@@ -20,7 +20,9 @@ Imports:
   tidyverse,
   stringr,
   ggridges,
-  gganimate
+  gganimate,
+  tidyr,
+  stringr
 Suggests:
   knitr,
   rmarkdown

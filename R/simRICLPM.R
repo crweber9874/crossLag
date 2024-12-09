@@ -1,6 +1,6 @@
-#' Simulate data from an observed, random intercept cross-lagged regression (RI-CLR) model
-#'
-#' Create a simulated dataset of a cross-lagged model with a specified number of waves and structural parameters.
+#' @title simulate_riclpm
+#' @description Simulate data from an observed, random intercept cross-lagged regression (RI-CLR) model
+#' In particular, this creates a synthetic dataset of a cross-lagged model with a specified number of waves and structural parameters.
 #'
 #' @param waves The number of waves (time points) in the model.
 #' @param stability.p The stability parameter for the x variable (autoregressive effect).
@@ -19,17 +19,29 @@
 #'
 simulate_riclpm = function(
          waves = 10,
-         stability.p = 0.5,
-         stability.q = 0.5,
+         stability.p = 0.2,
+         stability.q = 0.2,
          cross.p = 0.1,
          cross.q = 0.1,
-         variance.p = 1,
-         variance.q = 1,
-         cov.pq = 0.5,
-         beta.u = 0.5,
+         variance.p = 3,
+         variance.q = 3,
+         cov.pq = 0.1,
+         variance.between.x = 1, # random intercepts, x
+         variance.between.y = 1, # random intercepts, y
+         cov.between = 0.5, # covariance of intercept terms
          ...) {
                 model_string <- ""
 
+
+                model_string <- "between_x =~ 1* x1"
+                for(w in 2:waves){
+                  model_string <- paste0(model_string, " + 1 * x", w)
+                }
+
+                model_string <- paste0(model_string, "\n between_y =~ 1* y1")
+                for(w in 2:waves){
+                  model_string <- paste0(model_string, " + 1 * y", w, "")
+                }
 
                 #Intercepts
                 for(w in 1:waves){
@@ -38,11 +50,12 @@ simulate_riclpm = function(
 
                 }
 
+
                 # latent variable covariances and variances
                 model_string <- paste0(model_string,
-                                        "\nkappa ~~", 0.25, "* kappa
-                                         \nomega ~~", 0.25, "* omega
-                                         \nkappa ~~", 0.25, "* omega")
+                                        "\nbetween_x ~~",  variance.between.x, "* between_x
+                                         \nbetween_y ~~",  variance.between.y, "* between_y
+                                         \nbetween_x ~~",  cov.between, "* between_y")
 
 
                 # Loadings, 1 for identification with 1 observed, latent variable by wave
@@ -66,19 +79,27 @@ simulate_riclpm = function(
 
                 }
 
-                for(w in 1:waves){
-                  model_string <- paste0(model_string, "\n p", w, " ~ ", 0,"  * U",
-                                                       "\n q", w, " ~ ", 0, " * U")
-
-                }
-
-                model_string <- paste0(model_string, "\n U ~~ ", beta.u, "*U")
-                dat = lavaan::simulateData(model_string, ...)
+                # for(w in 1:waves){
+                #   model_string <- paste0(model_string, "\n p", w, " ~ ", 0,"  * U",
+                #                                        "\n q", w, " ~ ", 0, " * U")
+                #
+                # }
+                #
+                # model_string <- paste0(model_string, "\n U ~~ ", beta.u, "*U")
+                dat = lavaan::simulateData(model_string, meanstructure = TRUE,  int.ov.free = FALSE,...)
 
                 return(list(model = model_string, data = dat))
 
 
 return(model_string)
 }
+#simulate_riclpm(waves =3)
+# This works
+# Now test on clpm
+
+# model_syntax_clpm(waves = 4, model_type = "ri- clpm")
+#
+# lavaan::lavaan(model_syntax_clpm(waves = 5, model_type = "ri- clpm"), simulate_riclpm(wave = 5, sample.nobs = 1000)$data)
+#
 
 

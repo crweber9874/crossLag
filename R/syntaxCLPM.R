@@ -12,12 +12,12 @@
 model_syntax_clpm = function(
     waves = 10,
     model_type = c('clpm', 'ri-clpm')) {
-  model_string <- "kappa =~ 1* x1"
+  model_string <- "bx =~ 1* x1"
   for(w in 2:waves){
     model_string <- paste0(model_string, " + 1 * x", w)
   }
 
-  model_string <- paste0(model_string, "\n omega =~ 1* y1")
+  model_string <- paste0(model_string, "\n by =~ 1* y1")
   for(w in 2:waves){
     model_string <- paste0(model_string, " + 1 * y", w, "")
   }
@@ -28,18 +28,28 @@ model_syntax_clpm = function(
   # latent variable covariances and variances; the only difference between the RI-CLPM and the CLPM is
   # error variances -- intercepts -- are 0.
         model_string <- paste0(model_string,
-                         "\nkappa ~~", "0 * kappa
-                                         \nomega ~~", "0* omega
-                                         \nkappa ~~", "0* omega")
+                         "\nbx ~~", "0 * bx
+                                         \nby ~~", "0* by
+                                         \nbx ~~", "0* by")
   }
   if(model_type == "ri-clpm"){
     model_string <- paste0(model_string,
-                           "\nkappa ~~", "kappa
-                                         \nomega ~~", "omega
-                                         \nkappa ~~", "omega")
+                           "\bx ~~", "bx
+                                         \nby ~~", "by
+                                         \nby ~~", "bx")
   }
 
   # Loadings, 1 for identification with 1 observed, latent variable by wave
+
+  model_string <- "bx =~ 1* x1"
+  for(w in 2:waves){
+    model_string <- paste0(model_string, " + 1 * x", w)
+  }
+
+  model_string <- paste0(model_string, "\n by =~ 1* y1")
+  for(w in 2:waves){
+    model_string <- paste0(model_string, " + 1 * y", w, "")
+  }
 
   for(w in 1:waves){
     model_string <- paste0(model_string, "\np", w, " =~ 1*x", w,
@@ -64,3 +74,4 @@ model_syntax_clpm = function(
   return(model_string)
 }
 
+ # model_syntax_clpm(waves = 3, model_type = "ri- clpm") %>% cat()

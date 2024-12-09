@@ -1,4 +1,5 @@
-#' Reshape Data from Wide to Long Format for Cross-Lagged Analysis
+#' @title reshape_long_sim_cr
+#' @description Reshape Data from Wide to Long Format for Cross-Lagged Analysis
 #'
 #' This function takes a wide-format data frame containing variables named 'x1', 'x2', ..., 'xn', and 'y1', 'y2', ..., 'yn', and reshapes it into a long format suitable for cross-lagged analysis. The resulting data frame includes columns for individual ID, wave, x, y, xlag (lagged x), and ylag (lagged y).
 #'
