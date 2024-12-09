@@ -2,8 +2,9 @@ pandoc: '3.2'
 pkgdown: 2.0.9
 pkgdown_sha: ~
 articles:
-  simulation: simulation.html
-last_built: 2024-10-06T00:40Z
+  simulation: archive/simulation.html
+  simulationResults: paper/simulationResults.html
+last_built: 2024-12-09T19:32Z
 urls:
   reference: https://crweber9874.github.io/crossLag/reference
   article: https://crweber9874.github.io/crossLag/articles

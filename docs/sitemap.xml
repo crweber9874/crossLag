@@ -7,7 +7,13 @@
     <loc>https://crweber9874.github.io/crossLag/LICENSE-text.html</loc>
   </url>
   <url>
+    <loc>https://crweber9874.github.io/crossLag/articles/archive/simulation.html</loc>
+  </url>
+  <url>
     <loc>https://crweber9874.github.io/crossLag/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>https://crweber9874.github.io/crossLag/articles/paper/simulationResults.html</loc>
   </url>
   <url>
     <loc>https://crweber9874.github.io/crossLag/articles/simulation.html</loc>
@@ -31,10 +37,16 @@
     <loc>https://crweber9874.github.io/crossLag/reference/monteCarlo.html</loc>
   </url>
   <url>
+    <loc>https://crweber9874.github.io/crossLag/reference/monteCarlo_OLS.html</loc>
+  </url>
+  <url>
     <loc>https://crweber9874.github.io/crossLag/reference/reshape_long_sim_cr.html</loc>
   </url>
   <url>
     <loc>https://crweber9874.github.io/crossLag/reference/ri_graph.html</loc>
+  </url>
+  <url>
+    <loc>https://crweber9874.github.io/crossLag/reference/riclpm_graph.html</loc>
   </url>
   <url>
     <loc>https://crweber9874.github.io/crossLag/reference/simulate_latent_change_multiple.html</loc>
@@ -47,6 +59,9 @@
   </url>
   <url>
     <loc>https://crweber9874.github.io/crossLag/reference/simulate_riclpm.html</loc>
+  </url>
+  <url>
+    <loc>https://crweber9874.github.io/crossLag/reference/simulate_riclpm_confound.html</loc>
   </url>
   <url>
     <loc>https://crweber9874.github.io/crossLag/reference/zero.one.html</loc>
