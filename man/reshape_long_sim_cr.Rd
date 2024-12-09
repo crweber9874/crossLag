@@ -2,7 +2,7 @@
 % Please edit documentation in R/datLong.R
 \name{reshape_long_sim_cr}
 \alias{reshape_long_sim_cr}
-\title{Reshape Data from Wide to Long Format for Cross-Lagged Analysis}
+\title{reshape_long_sim_cr}
 \usage{
 reshape_long_sim_cr(data = dat)
 }
@@ -13,6 +13,8 @@ reshape_long_sim_cr(data = dat)
 A long-format data frame with columns 'id', 'wave', 'x', 'y', 'xlag', and 'ylag'.
 }
 \description{
+Reshape Data from Wide to Long Format for Cross-Lagged Analysis
+
 This function takes a wide-format data frame containing variables named 'x1', 'x2', ..., 'xn', and 'y1', 'y2', ..., 'yn', and reshapes it into a long format suitable for cross-lagged analysis. The resulting data frame includes columns for individual ID, wave, x, y, xlag (lagged x), and ylag (lagged y).
 }
 \examples{

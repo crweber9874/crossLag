@@ -1,6 +1,6 @@
 .Rproj.user
 .Rhistory
-.RData
+*.RData
 .Ruserdata
 inst/doc
 figure-html
@@ -10,3 +10,6 @@ figure-html
 tmp
 archive
 presentations
+*.Rd
+*.rda
+.gitignore
