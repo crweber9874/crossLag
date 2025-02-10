@@ -1,0 +1,27 @@
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true,
+    "source.fixAll.tslint": true
+  },
+  "editor.defaultFormatter": "REditorSupport.r",
+  "eslint.workingDirectories": [{ "mode": "auto" }],
+  "eslint.options": {
+    "rules": {
+      "import/default": "error",
+      "import/export": "error",
+      "import/named": "error",
+      "import/namespace": "error",
+      "import/no-duplicates": "error",
+      "import/no-named-as-default": "error",
+      "import/no-named-as-default-member": "error",
+      "import/no-unresolved": "error"
+    }
+  },
+  // Disable linting for R files
+  "r.linting.enabled": true,
+  // Increase line length for better readability
+  "editor.rulers": [120],
+  // Disable other formatting suggestions
+  "editor.formatOnSave": false,
+  "editor.formatOnType": false
+}

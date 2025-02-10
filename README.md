@@ -1,4 +1,4 @@
-# $\texttt{crossLag}$
+# $\texttt{crossLagR}$
 
 ### The Cross Lagged Regression Model
 
@@ -13,7 +13,7 @@ School of Government and Public Policy
 ### Installation
 
 ```r
-devtools::install_github("crweber9874/crossLag")
+devtools::install_github("crweber9874/crossLagR")
 ```
 
 ### Summary

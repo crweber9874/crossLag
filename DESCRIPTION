@@ -1,4 +1,4 @@
-Package: crossLag
+Package: crossLagR
 Type: Package
 Title: Latent variable models for estimating cross-lagged effects in R 
 Version: 0.1.0
@@ -22,7 +22,9 @@ Imports:
   ggridges,
   gganimate,
   tidyr,
-  stringr
+  stringr,
+  ctsem,
+  brms
 Suggests:
   knitr,
   rmarkdown

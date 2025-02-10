@@ -17,89 +17,83 @@
 
 #' @export
 #'
-simulate_riclpm = function(
-         waves = 10,
-         stability.p = 0.2,
-         stability.q = 0.2,
-         cross.p = 0.1,
-         cross.q = 0.1,
-         variance.p = 3,
-         variance.q = 3,
-         cov.pq = 0.1,
-         variance.between.x = 1, # random intercepts, x
-         variance.between.y = 1, # random intercepts, y
-         cov.between = 0.5, # covariance of intercept terms
-         ...) {
-                model_string <- ""
+#'
+
+simulate_riclpm <- function(waves = 10,
+                            stability.p = 0.2,
+                            stability.q = 0.2,
+                            cross.p = 0.1,
+                            cross.q = 0.1,
+                            variance.p = 1,
+                            variance.q = 1,
+                            cov.pq = 0.1,
+                            variance.between.x = 1, # random intercepts, x
+                            variance.between.y = 1, # random intercepts, y
+                            cov.between = 0.5, # covariance of intercept terms
+                            ...) {
+        model_string <- ""
+        model_string <- paste0(model_string, "\n BX =~  1* x1")
+        for (w in 2:waves) {
+                model_string <- paste0(model_string, " + 1 *x", w, "")
+        }
+        model_string <- paste0(model_string, "\n BY =~   1* y1")
+        for (w in 2:waves) {
+                model_string <- paste0(model_string, " + 1 * y", w)
+        }
+        model_string <- paste0(model_string, "\n")
 
 
-                model_string <- "between_x =~ 1* x1"
-                for(w in 2:waves){
-                  model_string <- paste0(model_string, " + 1 * x", w)
-                }
+        for (w in 1:waves) {
+                model_string <- paste0(model_string, "x", w, "~ 1", "\n")
+        }
+        for (w in 1:waves) {
+                model_string <- paste0(model_string, "y", w, "~ 1", "\n")
+        }
+        for (w in 1:waves) {
+                model_string <- paste0(
+                        model_string, "\np", w, " =~ 1*x", w,
+                        "\nq", w, " =~ 1*y", w
+                )
+        }
 
-                model_string <- paste0(model_string, "\n between_y =~ 1* y1")
-                for(w in 2:waves){
-                  model_string <- paste0(model_string, " + 1 * y", w, "")
-                }
+        # Stability
+        for (w in 2:waves) {
+                model_string <- paste0(
+                        model_string, "\n p", w, " ~ ", stability.p, " * p", w - 1, " + ", cross.q, " * q", w - 1,
+                        "\n q", w, " ~  ", stability.q, " * q", w - 1, " + ", cross.p, " * p", w - 1
+                )
+        }
 
-                #Intercepts
-                for(w in 1:waves){
-                  model_string <- paste0(model_string, "\nx", w, " ~ mu", w, "*0",
-                                                       "\ny", w, " ~ pi", w, "*0")
+        for (w in 1:waves) {
+                model_string <- paste0(
+                        model_string, "\n p", w, " ~~ ", variance.p, " * p", w,
+                        "\n q", w, " ~~ ", variance.q, " * q", w,
+                        "\n p", w, " ~~ ", cov.pq, " * q", w
+                )
+        }
 
-                }
+        for (w in 1:waves) {
+                model_string <- paste0(
+                        model_string, "\nx", w, "~~",
+                        "0*", "x", w
+                )
+        }
+        for (w in 1:waves) {
+                model_string <- paste0(
+                        model_string, "\ny", w, "~~",
+                        "0*", "y", w
+                )
+        }
 
-
-                # latent variable covariances and variances
-                model_string <- paste0(model_string,
-                                        "\nbetween_x ~~",  variance.between.x, "* between_x
-                                         \nbetween_y ~~",  variance.between.y, "* between_y
-                                         \nbetween_x ~~",  cov.between, "* between_y")
-
-
-                # Loadings, 1 for identification with 1 observed, latent variable by wave
-
-                for(w in 1:waves){
-                  model_string <- paste0(model_string, "\np", w, " =~ 1*x", w,
-                                                       "\nq", w, " =~ 1*y", w)
-                  }
-
-                for(w in waves:2){
-                  model_string <- paste0(model_string, "\n p", w, " ~ ", stability.p, " * p", w-1, " + ",  cross.q, " * q", w-1,
-                                                       "\n q", w, " ~ ", stability.q, " * q", w-1, " + ",  cross.p, " * p", w-1)
-
-                }
-
-                for(w in 1:waves){
-                  model_string <- paste0(model_string, "\n p", w, " ~~ ", variance.p," * p", w,
-                                                       "\n q", w, " ~~ ", variance.q, " * q", w,
-                                                       "\n p", w, " ~~ ", cov.pq, " * q", w)
-
-
-                }
-
-                # for(w in 1:waves){
-                #   model_string <- paste0(model_string, "\n p", w, " ~ ", 0,"  * U",
-                #                                        "\n q", w, " ~ ", 0, " * U")
-                #
-                # }
-                #
-                # model_string <- paste0(model_string, "\n U ~~ ", beta.u, "*U")
-                dat = lavaan::simulateData(model_string, meanstructure = TRUE,  int.ov.free = FALSE,...)
-
-                return(list(model = model_string, data = dat))
+        model_string <- paste0(
+                model_string,
+                "\n BX ~~", variance.between.x, "* BX",
+                "\n BY ~~", variance.between.y, "* BY",
+                "\n BX ~~", cov.between, "* BY"
+        )
 
 
-return(model_string)
+        dat <- lavaan::simulateData(model = model_string, int.ov.free = FALSE)
+
+        return(list(model = model_string, data = dat))
 }
-#simulate_riclpm(waves =3)
-# This works
-# Now test on clpm
-
-# model_syntax_clpm(waves = 4, model_type = "ri- clpm")
-#
-# lavaan::lavaan(model_syntax_clpm(waves = 5, model_type = "ri- clpm"), simulate_riclpm(wave = 5, sample.nobs = 1000)$data)
-#
-
-

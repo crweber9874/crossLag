@@ -13,3 +13,4 @@ presentations
 *.Rd
 *.rda
 .gitignore
+docs
